@@ -1,0 +1,4 @@
+subir imágenes
+y que cada imagen le cree un campo con una secuencia y que el nombre se pueda cambiar
+informes
+campos de select de clientes, nombre

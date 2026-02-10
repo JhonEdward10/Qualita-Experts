@@ -27,25 +27,30 @@ const Login = ({ onLogin }) => {
     setLoading(true);
     setError('');
 
-    try {
-      const response = await ApiService.login(username, password);
-      
-      // Adaptar los datos según lo que devuelva tu API
-      const userData = {
-        username: response.username || response.user || username,
-        fullName: response.fullName || response.full_name || response.name || 'Usuario',
-        role: response.role || response.user_type || response.tipo || 'Usuario',
-        id: response.id || response.user_id,
-        // Agregar otros campos según tu API
-      };
+    // ################################################################
 
-      onLogin(userData);
-    } catch (error) {
-      setError(error.message);
-    } finally {
+    // Validar credenciales locales sin backend
+    const validCredentials = [
+      { username: "user1", password: "123", role: "administrador", fullName: "Jhon Mendez"},
+      { username: "admin", password: "321", role: "usuario", fullName: "German Muñoz"}
+    ];
+
+    const user = validCredentials.find(
+      cred => cred.username === username && cred.password === password
+    );
+
+    if (user) {
+      // Guardar en localStorage para simular sesión
+      localStorage.setItem('auth_token', 'mock_token_' + Date.now());
+      localStorage.setItem('user_data', JSON.stringify(user));
+      onLogin(user);
+    } else {
+      setError('Usuario o contraseña incorrectos');
       setLoading(false);
     }
   };
+
+ // ################################################################
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -125,6 +130,7 @@ return (
         <div className="mt-6 p-3 bg-qualitaGray rounded text-sm border border-qualitaGreen">
           <p className="block text-qualitaGreen text-sm font-bold mb-2">Credenciales de prueba:</p>
           <p>Usuario: <code>user1</code> - Contraseña: <code>123</code></p>
+          <p>Usuario: <code>admin</code> - Contraseña: <code>321</code></p>
         </div>  
       </div>
     </div>
